@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kirby Air Riders - World Records</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <!-- Top grey nav bar -->
+    <header class="top-nav">
+      <div class="top-nav-inner">
+        <nav class="top-links">
+          <a href="#" class="top-link" data-view="home">Upload</a>
+          <span class="top-separator">|</span>
+          <a href="#" class="top-link">Log in</a>
+          <span class="top-separator">|</span>
+          <a href="#" class="top-link">Register</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- Sidebar (always the same) -->
+      <aside class="sidebar">
+        <!-- Logo -->
+        <div class="logo-panel">
+          <a href="#" class="logo-link" data-view="home">
+            <img
+              src="images/logos/logo.png"
+              alt="Kirby Air Riders Logo"
+              class="site-logo"
+            />
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <nav class="sidebar-panel">
+          <h2 class="sidebar-title">Stats</h2>
+          <ul class="sidebar-list">
+            <li><a href="#" class="nav-link" data-view="home">Current WRs</a></li>
+            <li><a href="#" class="nav-link">WR Snapshot</a></li>
+            <li><a href="#" class="nav-link">Player Rankings</a></li>
+            <li><a href="#" class="nav-link">Country Rankings</a></li>
+            <li><a href="#" class="nav-link">Recent WRs</a></li>
+          </ul>
+        </nav>
+
+        <!-- Air Ride WR History -->
+        <nav class="sidebar-panel">
+          <div class="sidebar-title-row">
+            <h2 class="sidebar-title">Air Ride WR History</h2>
+            <img
+              src="images/logos/airride.png"
+              alt="Air Ride"
+              class="mini-logo"
+            />
+          </div>
+          <ul class="sidebar-list sidebar-list-tight">
+            <li><a href="#" class="course-link" data-course-id="floria-fields">Floria Fields</a></li>
+            <li><a href="#" class="course-link" data-course-id="waveflow-waters">Waveflow Waters</a></li>
+            <li><a href="#" class="course-link" data-course-id="airtopia-ruins">Airtopia Ruins</a></li>
+            <li><a href="#" class="course-link" data-course-id="crystalline-fissure">Crystalline Fissure</a></li>
+            <li><a href="#" class="course-link" data-course-id="steamgust-forge">Steamgust Forge</a></li>
+            <li><a href="#" class="course-link" data-course-id="cavernous-corners">Cavernous Corners</a></li>
+            <li><a href="#" class="course-link" data-course-id="cyberion-highway">Cyberion Highway</a></li>
+            <li><a href="#" class="course-link" data-course-id="mount-amberfalls">Mount Amberfalls</a></li>
+            <li><a href="#" class="course-link" data-course-id="galactic-nova">Galactic Nova</a></li>
+
+            <!-- moved here -->
+            <li><a href="#" class="course-link" data-course-id="fantasy-meadows">Fantasy Meadows</a></li>
+            <li><a href="#" class="course-link" data-course-id="frozen-hillside">Frozen Hillside</a></li>
+
+            <li><a href="#" class="course-link" data-course-id="celestial-valley">Celestial Valley</a></li>
+            <li><a href="#" class="course-link" data-course-id="sky-sands">Sky Sands</a></li>
+            <li><a href="#" class="course-link" data-course-id="magma-flows">Magma Flows</a></li>
+            <li><a href="#" class="course-link" data-course-id="beanstalk-park">Beanstalk Park</a></li>
+            <li><a href="#" class="course-link" data-course-id="machine-passage">Machine Passage</a></li>
+            <li><a href="#" class="course-link" data-course-id="checker-knights">Checker Knights</a></li>
+            <li><a href="#" class="course-link" data-course-id="nebula-belt">Nebula Belt</a></li>
+          </ul>
+        </nav>
+
+        <!-- Top Ride WR History -->
+        <nav class="sidebar-panel">
+          <div class="sidebar-title-row">
+            <h2 class="sidebar-title">Top Ride WR History</h2>
+            <img
+              src="images/logos/topride.png"
+              alt="Top Ride"
+              class="mini-logo"
+            />
+          </div>
+          <ul class="sidebar-list sidebar-list-tight">
+            <li><a href="#" class="course-link" data-course-id="flower">Flower</a></li>
+            <li><a href="#" class="course-link" data-course-id="flow">Flow</a></li>
+            <li><a href="#" class="course-link" data-course-id="air">Air</a></li>
+            <li><a href="#" class="course-link" data-course-id="crystal">Crystal</a></li>
+            <li><a href="#" class="course-link" data-course-id="steam">Steam</a></li>
+            <li><a href="#" class="course-link" data-course-id="cave">Cave</a></li>
+            <li><a href="#" class="course-link" data-course-id="cyber">Cyber</a></li>
+            <li><a href="#" class="course-link" data-course-id="mountain">Mountain</a></li>
+            <li><a href="#" class="course-link" data-course-id="nova">Nova</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="content">
+        <!-- HOME VIEW -->
+        <section class="course-panel active" data-view="home">
+          <h1 class="page-title">Kirby Air Riders - World Records</h1>
+          <p class="placeholder-text">
+            Browse current world records across all Air Ride and Top Ride courses.
+            Click a course on the left to view machine-specific records and history.
+          </p>
+
+          <h2 class="section-title">Highlighted Courses</h2>
+          <div class="table-wrapper">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Machine</th>
+                  <th>Time</th>
+                  <th>Player</th>
+                  <th>Nation</th>
+                  <th>Date</th>
+                  <th>Character</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Floria Fields: Warp Star & Kirby -->
+                <tr>
+                  <td>Floria Fields</td>
+                  <td class="machine-cell">
+                    <img
+                      src="images/machineICONS/KARs_Warp_Star_Icon.png"
+                      alt="Warp Star"
+                      class="machine-icon"
+                    />
+                    <span>Warp Star</span>
+                  </td>
+                  <td>1'12&quot;501</td>
+                  <td>petal</td>
+                  <td>
+                    <img
+                      src="images/country-flags-main/svg/us.svg"
+                      alt="USA"
+                      class="flag"
+                    />
+                  </td>
+                  <td>2025-09-12</td>
+                  <td>
+                    <img
+                      src="images/charICONS/KARs_Kirby_icon.png"
+                      alt="Kirby"
+                      class="char-icon"
+                    />
+                  </td>
+                </tr>
+
+                <!-- Waveflow Waters: Rex Wheelie & Marx -->
+                <tr>
+                  <td>Waveflow Waters</td>
+                  <td class="machine-cell">
+                    <img
+                      src="images/machineICONS/KARs_Rex_Wheelie_Icon.png"
+                      alt="Rex Wheelie"
+                      class="machine-icon"
+                    />
+                    <span>Rex Wheelie</span>
+                  </td>
+                  <td>1'05&quot;780</td>
+                  <td>tsunami</td>
+                  <td>
+                    <img
+                      src="images/country-flags-main/svg/jp.svg"
+                      alt="Japan"
+                      class="flag"
+                    />
+                  </td>
+                  <td>2025-08-02</td>
+                  <td>
+                    <img
+                      src="images/charICONS/KARs_Marx_icon.png"
+                      alt="Marx"
+                      class="char-icon"
+                    />
+                  </td>
+                </tr>
+
+                <!-- Flower (Top Ride): Bull Tank & Taranza -->
+                <tr>
+                  <td>Flower (Top Ride)</td>
+                  <td class="machine-cell">
+                    <img
+                      src="images/machineICONS/KARs_Bull_Tank_Icon.png"
+                      alt="Bull Tank"
+                      class="machine-icon"
+                    />
+                    <span>Bull Tank</span>
+                  </td>
+                  <td>0'32&quot;120</td>
+                  <td>blossom</td>
+                  <td>
+                    <img
+                      src="images/country-flags-main/svg/ca.svg"
+                      alt="Canada"
+                      class="flag"
+                    />
+                  </td>
+                  <td>2025-03-04</td>
+                  <td>
+                    <img
+                      src="images/charICONS/KARs_Taranza_icon.png"
+                      alt="Taranza"
+                      class="char-icon"
+                    />
+                  </td>
+                </tr>
+
+                <!-- Flow (Top Ride): Hop Star & Meta Knight -->
+                <tr>
+                  <td>Flow (Top Ride)</td>
+                  <td class="machine-cell">
+                    <img
+                      src="images/machineICONS/KARs_Hop_Star_Icon.png"
+                      alt="Hop Star"
+                      class="machine-icon"
+                    />
+                    <span>Hop Star</span>
+                  </td>
+                  <td>0'29&quot;800</td>
+                  <td>river</td>
+                  <td>
+                    <img
+                      src="images/country-flags-main/svg/us.svg"
+                      alt="USA"
+                      class="flag"
+                    />
+                  </td>
+                  <td>2025-01-20</td>
+                  <td>
+                    <img
+                      src="images/charICONS/KARs_Meta_Knight_icon.png"
+                      alt="Meta Knight"
+                      class="char-icon"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- DYNAMIC COURSE VIEW -->
+        <section class="course-panel" data-view="course" id="course-panel">
+          <h1 class="page-title" id="course-title">Course Name</h1>
+
+          <h2 class="course-section-title">Current Machine WRs</h2>
+          <p class="course-note" id="course-note">
+            One record per machine for this course.
+          </p>
+
+          <div class="table-wrapper course-table-wrapper">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>Machine</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Player</th>
+                  <th>Nation</th>
+                  <th>Days</th>
+                  <th>Lap 1</th>
+                  <th>Lap 2</th>
+                  <th>Lap 3</th>
+                  <th>Character</th>
+                </tr>
+              </thead>
+              <tbody id="current-wrs-body">
+                <!-- filled by scripts.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="course-section-title">Course Stats</h2>
+          <div class="course-stats-row">
+            <!-- by player -->
+            <div class="stat-box">
+              <table class="stat-table">
+                <thead>
+                  <tr><th>Player</th><th>Total WR Days</th><th>%</th></tr>
+                </thead>
+                <tbody id="stats-by-player">
+                  <!-- filled by scripts.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- by machine -->
+            <div class="stat-box">
+              <table class="stat-table">
+                <thead>
+                  <tr><th>Machine</th><th>Total WR Days</th><th>%</th></tr>
+                </thead>
+                <tbody id="stats-by-machine">
+                  <!-- filled by scripts.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- by nation -->
+            <div class="stat-box">
+              <table class="stat-table">
+                <thead>
+                  <tr><th>Nation</th><th>Number of WRs</th></tr>
+                </thead>
+                <tbody id="stats-by-nation">
+                  <!-- filled by scripts.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- summary + map -->
+            <div class="stat-box course-image-box">
+              <ul class="course-summary" id="course-summary">
+                <!-- filled by scripts.js -->
+              </ul>
+              <img
+                src=""
+                alt=""
+                class="course-image"
+                id="course-map"
+              />
+            </div>
+          </div>
+
+          <h2 class="course-section-title">History</h2>
+          <div class="table-wrapper course-table-wrapper">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Machine</th>
+                  <th>Time</th>
+                  <th>Player</th>
+                  <th>Nation</th>
+                  <th>Days</th>
+                  <th>Lap 1</th>
+                  <th>Lap 2</th>
+                  <th>Lap 3</th>
+                  <th>Character</th>
+                </tr>
+              </thead>
+              <tbody id="history-body">
+                <!-- filled by scripts.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
