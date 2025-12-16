@@ -1,8 +1,12 @@
 // =================== CONFIG ===================
-//const API_BASE = "http://127.0.0.1:5000";
-const API_BASE = "http://127.0.0.1:5500";   // Turned out we just needed to change this to get countries to display
+const API_BASE = "http://127.0.0.1:5000"; // Backend API base URL
+const STATIC_BASE = "static";
 
-// =================== AUTH HELPERS ===================
+// =================== UTIL ===================
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function getToken() {
   return localStorage.getItem("access_token");
 }
@@ -21,9 +25,36 @@ function logoutNow() {
   updateTopNav();
 }
 
+function normalizeCountryCode(code) {
+  if (!code) return "us";
+  const s = String(code).toLowerCase().trim();
+  if (s === "0" || s.length < 2) return "us";
+  return s.slice(0, 2);
+}
+
+function flagSrc(code) {
+  const c = normalizeCountryCode(code);
+  return `${STATIC_BASE}/images/country-flags-main/svg/${c}.svg`;
+}
+
+function safeStaticPath(p) {
+  if (!p) return "";
+  const pp = String(p).replaceAll("\\", "/").trim();
+  if (pp.startsWith("http://") || pp.startsWith("https://") || pp.startsWith("/")) return pp;
+  if (pp.startsWith("static/")) return pp;
+  return `${STATIC_BASE}/${pp}`;
+}
+
+async function fetchJSON(url, options = {}) {
+  const res = await fetch(url, options);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
+}
+
 // =================== MODALS ===================
 function openModal(id) {
-  document.getElementById(id).classList.add("active");
+  document.getElementById(id)?.classList.add("active");
 }
 function closeModals() {
   document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
@@ -64,30 +95,38 @@ function attachNavHandlers() {
   if (upload) {
     upload.onclick = (e) => {
       e.preventDefault();
+      scrollToTop();
       if (!isLoggedIn()) return openModal("login-modal");
       openModal("upload-modal");
     };
   }
 
-  if (login) login.onclick = (e) => { e.preventDefault(); openModal("login-modal"); };
-  if (register) register.onclick = (e) => { e.preventDefault(); openModal("register-modal"); };
-  // if (register) register.onclick = (e) => { e.preventDefault(); openModal("register-modal"); loadCountries(); };
-  // if (register) register.onclick = (e) => { e.preventDefault(); openModal("register-modal"); document.getElementById("register-country").addEventListener("click", loadCountries); };
-  
+  if (login) login.onclick = (e) => { e.preventDefault(); scrollToTop(); openModal("login-modal"); };
+
+  if (register) register.onclick = (e) => {
+    e.preventDefault();
+    scrollToTop();
+    openModal("register-modal");
+    loadCountries();
+  };
 
   if (profile) {
     profile.onclick = (e) => {
       e.preventDefault();
+      scrollToTop();
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       document.getElementById("profile-username").value = user.username || "";
-      document.getElementById("profile-country").value = user.country_code || "";
       openModal("profile-modal");
+      loadCountries().then(() => {
+        document.getElementById("profile-country").value = (user.country_code || "").toLowerCase();
+      });
     };
   }
 
   if (logout) {
     logout.onclick = (e) => {
       e.preventDefault();
+      scrollToTop();
       logoutNow();
     };
   }
@@ -95,23 +134,18 @@ function attachNavHandlers() {
 
 // =================== COUNTRIES ===================
 async function loadCountries() {
-  // console.log('Hello');
   try {
-    const res = await fetch(`${API_BASE}/api/countries`);
-    const countries = await res.json();
-
+    const countries = await fetchJSON(`${API_BASE}/api/countries`);
     const selects = [
       document.getElementById("register-country"),
       document.getElementById("profile-country")
     ];
-    // Reducing repetitive code
     selects.forEach(select => {
       if (!select) return;
-      // console.log('Yo');
       select.innerHTML = `<option value="">Country</option>`;
       countries.forEach(c => {
         const opt = document.createElement("option");
-        opt.value = c.code;
+        opt.value = (c.code || "").toLowerCase();
         opt.textContent = c.name;
         select.appendChild(opt);
       });
@@ -122,83 +156,76 @@ async function loadCountries() {
 }
 
 // =================== AUTH FORMS ===================
-document.getElementById("login-form").addEventListener("submit", async e => {
+document.getElementById("login-form")?.addEventListener("submit", async e => {
   e.preventDefault();
 
   const username = document.getElementById("login-username").value.trim();
   const password = document.getElementById("login-password").value;
 
-  const res = await fetch(`${API_BASE}/api/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+  try {
+    const data = await fetchJSON(`${API_BASE}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
 
-  const data = await res.json();
-  if (!res.ok) {
-    alert(data.error || "Login failed");
-    return;
+    localStorage.setItem("access_token", data.access_token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    closeModals();
+    updateTopNav();
+  } catch (err) {
+    alert(err.message || "Login failed");
   }
-
-  localStorage.setItem("access_token", data.access_token);
-  localStorage.setItem("user", JSON.stringify(data.user));
-
-  closeModals();
-  updateTopNav();
 });
 
-document.getElementById("register-form").addEventListener("submit", async e => {
+document.getElementById("register-form")?.addEventListener("submit", async e => {
   e.preventDefault();
 
   const username = document.getElementById("register-username").value.trim();
   const password = document.getElementById("register-password").value;
   const country_code = document.getElementById("register-country").value || null;
 
-  const res = await fetch(`${API_BASE}/api/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password, country_code })
-  });
+  try {
+    const data = await fetchJSON(`${API_BASE}/api/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password, country_code })
+    });
 
-  const data = await res.json();
-  if (!res.ok) {
-    alert(data.error || "Registration failed");
-    return;
+    localStorage.setItem("access_token", data.access_token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    closeModals();
+    updateTopNav();
+  } catch (err) {
+    alert(err.message || "Registration failed");
   }
-
-  localStorage.setItem("access_token", data.access_token);
-  localStorage.setItem("user", JSON.stringify(data.user));
-
-  closeModals();
-  updateTopNav();
 });
 
-document.getElementById("profile-form").addEventListener("submit", async e => {
+document.getElementById("profile-form")?.addEventListener("submit", async e => {
   e.preventDefault();
   if (!isLoggedIn()) return;
 
   const country_code = document.getElementById("profile-country").value || null;
 
-  const res = await fetch(`${API_BASE}/api/me`, {
-    method: "PATCH",
-    headers: authHeaders({ "Content-Type": "application/json" }),
-    body: JSON.stringify({ country_code })
-  });
+  try {
+    const data = await fetchJSON(`${API_BASE}/api/me`, {
+      method: "PATCH",
+      headers: authHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify({ country_code })
+    });
 
-  const data = await res.json();
-  if (!res.ok) {
-    alert(data.error || "Update failed");
-    return;
+    localStorage.setItem("user", JSON.stringify(data));
+    closeModals();
+    updateTopNav();
+  } catch (err) {
+    alert(err.message || "Update failed");
   }
-
-  // keep local user in sync
-  localStorage.setItem("user", JSON.stringify(data));
-  closeModals();
-  updateTopNav();
 });
 
 // =================== UPLOAD FORM (multipart + JWT) ===================
-document.getElementById("upload-form").addEventListener("submit", async e => {
+document.getElementById("upload-form")?.addEventListener("submit", async e => {
   e.preventDefault();
   if (!isLoggedIn()) {
     alert("You must be logged in to upload.");
@@ -225,68 +252,188 @@ document.getElementById("upload-form").addEventListener("submit", async e => {
   }
   fd.append("proof", proof);
 
-  const res = await fetch(`${API_BASE}/api/records`, {
-    method: "POST",
-    headers: authHeaders(), // JWT only; no content-type for FormData
-    body: fd
-  });
+  try {
+    await fetchJSON(`${API_BASE}/api/records`, {
+      method: "POST",
+      headers: authHeaders(), // JWT only
+      body: fd
+    });
 
-  const data = await res.json();
-  if (!res.ok) {
-    alert(data.error || "Upload failed");
-    return;
+    alert("Record submitted successfully!");
+    closeModals();
+
+    // refresh the main stats pages
+    loadHomeCurrentWrs();
+    loadRecentWrs();
+  } catch (err) {
+    alert(err.message || "Upload failed");
   }
-
-  alert("Record submitted successfully!");
-  closeModals();
 });
 
 // =================== VIEW SWITCHING ===================
-const panels = document.querySelectorAll('.course-panel');
-const courseLinks = document.querySelectorAll('.course-link');
-const homeLinks = document.querySelectorAll('[data-view="home"]');
+const panels = document.querySelectorAll(".course-panel");
+const courseLinks = document.querySelectorAll(".course-link");
+const navLinks = document.querySelectorAll(".nav-link[data-view]");
+const logoLink = document.querySelector(".logo-link[data-view]");
 
-const courseTitle = document.getElementById('course-title');
-const courseNote = document.getElementById('course-note');
-const currentWrsBody = document.getElementById('current-wrs-body');
-const statsByPlayerBody = document.getElementById('stats-by-player');
-const statsByMachineBody = document.getElementById('stats-by-machine');
-const statsByNationBody = document.getElementById('stats-by-nation');
-const courseSummary = document.getElementById('course-summary');
-const courseMap = document.getElementById('course-map');
-const historyBody = document.getElementById('history-body');
+// Course panel DOM
+const courseTitle = document.getElementById("course-title");
+const courseNote = document.getElementById("course-note");
+const currentWrsBody = document.getElementById("current-wrs-body");
+const courseSummary = document.getElementById("course-summary");
+const courseMap = document.getElementById("course-map");
+const historyBody = document.getElementById("history-body");
+
+// Course stats DOM (these were missing -> made the boxes blank)
+const statsByPlayerBody = document.getElementById("stats-by-player");
+const statsByMachineBody = document.getElementById("stats-by-machine");
+const statsByNationBody = document.getElementById("stats-by-nation");
 
 function showView(viewName) {
   panels.forEach(panel =>
-    panel.classList.toggle('active', panel.dataset.view === viewName)
+    panel.classList.toggle("active", panel.dataset.view === viewName)
   );
 }
 
 function setActiveCourseLink(courseId) {
   courseLinks.forEach(link => {
-    link.classList.toggle('course-link-active', link.dataset.courseId === courseId);
+    link.classList.toggle("course-link-active", link.dataset.courseId === courseId);
   });
+}
+
+// =================== STATS PAGE LOADERS ===================
+async function loadHomeCurrentWrs() {
+  const tbody = document.getElementById("home-current-wrs-body");
+  if (!tbody) return;
+
+  try {
+    const rows = await fetchJSON(`${API_BASE}/api/current-wrs`);
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.course_name}</td>
+        <td class="machine-cell">
+          <img src="${safeStaticPath(r.machine_icon)}" class="machine-icon" alt="">
+          <span>${r.machine_name}</span>
+        </td>
+        <td>${r.time}</td>
+        <td>${r.player}</td>
+        <td><img src="${flagSrc(r.nation_code)}" class="flag" alt=""></td>
+        <td>${r.date || ""}</td>
+        <td><img src="${safeStaticPath(r.char_icon)}" class="char-icon" alt=""></td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = "";
+  }
+}
+
+async function loadSnapshot() {
+  const tbody = document.getElementById("snapshot-body");
+  if (!tbody) return;
+
+  try {
+    const rows = await fetchJSON(`${API_BASE}/api/wr-snapshot`);
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.course_name}</td>
+        <td class="machine-cell">
+          <img src="${safeStaticPath(r.machine_icon)}" class="machine-icon" alt="">
+          <span>${r.machine_name}</span>
+        </td>
+        <td>${r.time}</td>
+        <td>${r.player}</td>
+        <td><img src="${flagSrc(r.nation_code)}" class="flag" alt=""></td>
+        <td>${r.date || ""}</td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = "";
+  }
+}
+
+async function loadPlayerRankings() {
+  const tbody = document.getElementById("player-rankings-body");
+  if (!tbody) return;
+
+  try {
+    const rows = await fetchJSON(`${API_BASE}/api/rankings/players`);
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.rank}</td>
+        <td>${r.player}</td>
+        <td><img src="${flagSrc(r.nation_code)}" class="flag" alt=""></td>
+        <td>${r.wr_count}</td>
+        <td>${r.total_wr_days}</td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = "";
+  }
+}
+
+async function loadCountryRankings() {
+  const tbody = document.getElementById("country-rankings-body");
+  if (!tbody) return;
+
+  try {
+    const rows = await fetchJSON(`${API_BASE}/api/rankings/countries`);
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.rank}</td>
+        <td><img src="${flagSrc(r.nation_code)}" class="flag" alt=""></td>
+        <td>${r.wr_count}</td>
+        <td>${r.unique_players}</td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = "";
+  }
+}
+
+async function loadRecentWrs() {
+  const tbody = document.getElementById("recent-wrs-body");
+  if (!tbody) return;
+
+  try {
+    const rows = await fetchJSON(`${API_BASE}/api/recent-wrs?days=5`);
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.date || ""}</td>
+        <td>${r.course_name}</td>
+        <td class="machine-cell">
+          <img src="${safeStaticPath(r.machine_icon)}" class="machine-icon" alt="">
+          <span>${r.machine_name}</span>
+        </td>
+        <td>${r.time}</td>
+        <td>${r.player}</td>
+        <td><img src="${flagSrc(r.nation_code)}" class="flag" alt=""></td>
+        <td><img src="${safeStaticPath(r.char_icon)}" class="char-icon" alt=""></td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = "";
+  }
 }
 
 // =================== COURSE FETCH (from backend) ===================
 async function loadCourse(courseId) {
   try {
-    const res = await fetch(`${API_BASE}/api/course/${courseId}`);
-    const data = await res.json();
-
-    if (!res.ok) {
-      courseTitle.textContent = "Coming soon";
-      courseNote.textContent = data.error || "No data available yet.";
-      currentWrsBody.innerHTML = "";
-      historyBody.innerHTML = "";
-      return;
-    }
-
+    const data = await fetchJSON(`${API_BASE}/api/course/${courseId}`);
     renderCourse(data);
   } catch (err) {
     console.error(err);
     courseTitle.textContent = "Error";
-    courseNote.textContent = "Backend not reachable.";
+    courseNote.textContent = "No data available yet.";
+    currentWrsBody.innerHTML = "";
+    historyBody.innerHTML = "";
+    if (statsByPlayerBody) statsByPlayerBody.innerHTML = "";
+    if (statsByMachineBody) statsByMachineBody.innerHTML = "";
+    if (statsByNationBody) statsByNationBody.innerHTML = "";
   }
 }
 
@@ -295,27 +442,26 @@ function renderCourse(data) {
   courseNote.textContent = "One record per machine for " + data.name + ".";
 
   currentWrsBody.innerHTML = "";
-  data.currentMachineWrs.forEach(row => {
+  (data.currentMachineWrs || []).forEach(row => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="machine-cell">
-        <img src="${row.machineIcon}" alt="${row.machineName}" class="machine-icon">
+        <img src="${safeStaticPath(row.machineIcon)}" alt="${row.machineName}" class="machine-icon">
         <span>${row.machineName}</span>
       </td>
-      <td>${row.date}</td>
-      <td>${row.time}</td>
-      <td>${row.player}</td>
-      <td><img src="images/country-flags-main/svg/${row.nationCode}.svg" class="flag" alt=""></td>
+      <td>${row.date || ""}</td>
+      <td>${row.time || ""}</td>
+      <td>${row.player || ""}</td>
+      <td><img src="${flagSrc(row.nationCode)}" class="flag" alt=""></td>
       <td>${row.days ?? 0}</td>
       <td>${row.lap1 ?? ""}</td>
       <td>${row.lap2 ?? ""}</td>
       <td>${row.lap3 ?? ""}</td>
-      <td><img src="${row.charIcon}" alt="${row.charAlt}" class="char-icon"></td>
+      <td><img src="${safeStaticPath(row.charIcon)}" alt="" class="char-icon"></td>
     `;
     currentWrsBody.appendChild(tr);
   });
 
-  // summary
   const sum = data.summary || {};
   courseSummary.innerHTML = `
     <li><strong>Total WRs:</strong> ${sum.totalMachineWrs ?? 0}</li>
@@ -324,31 +470,111 @@ function renderCourse(data) {
     <li><strong>Machines:</strong> ${sum.uniqueMachines ?? 0}</li>
   `;
 
-  // map icon
-  courseMap.src = data.mapIcon ? data.mapIcon : "";
+  courseMap.src = safeStaticPath(data.mapIcon || "");
   courseMap.alt = data.name;
 
-  // history
+  // ===== CHANGES YOU REQUESTED =====
+  const stats = data.stats || {};
+
+  // 1) Remove / hide the Player stats section (body rows)
+  if (statsByPlayerBody) {
+    statsByPlayerBody.innerHTML = "";
+    // Optional: hide the whole box visually (keeps layout clean)
+    const playerBox = statsByPlayerBody.closest(".stat-box");
+    if (playerBox) playerBox.style.display = "none";
+  }
+
+  // Build machine icon lookup so machine stats can show icons
+  const machineIconByName = {};
+  (data.currentMachineWrs || []).forEach(r => {
+    if (r?.machineName && r?.machineIcon) machineIconByName[r.machineName] = r.machineIcon;
+  });
+
+  // 2) Machine stats table (unchanged)
+  if (statsByMachineBody) {
+    statsByMachineBody.innerHTML = (stats.byMachine || []).map(r => {
+      const icon = machineIconByName[r.machine] || "";
+      return `
+        <tr>
+          <td class="machine-cell">
+            ${icon ? `<img src="${safeStaticPath(icon)}" class="machine-icon" alt="">` : ``}
+            <span>${r.machine ?? ""}</span>
+          </td>
+          <td>${r.total ?? 0}</td>
+          <td>${r.pct ?? 0}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  
+  if (statsByNationBody) {
+    statsByNationBody.innerHTML = (stats.byNation || []).map(r => `
+      <tr>
+        <td><img src="${flagSrc(r.nation)}" class="flag" alt=""></td>
+        <td>${r.count ?? 0}</td>
+      </tr>
+    `).join("");
+  }
+
+  // 4) Make the overall stats + map appear FIRST in the Course Stats row
+  //    (This is the box containing #course-summary and #course-map)
+  const statsRow = document.querySelector(".course-stats-row");
+  const summaryBox = courseSummary?.closest(".stat-box");
+  if (statsRow && summaryBox) {
+    statsRow.prepend(summaryBox);
+  }
+  // ===== END CHANGES =====
+
   historyBody.innerHTML = (data.history || []).map(h => `
     <tr>
-      <td>${h.date}</td>
+      <td>${h.date || ""}</td>
       <td class="machine-cell">
-        <img src="${h.machineIcon}" class="machine-icon" alt="">
-        <span>${h.machineName}</span>
+        <img src="${safeStaticPath(h.machineIcon)}" class="machine-icon" alt="">
+        <span>${h.machineName || ""}</span>
       </td>
-      <td>${h.time}</td>
-      <td>${h.player}</td>
-      <td><img src="images/country-flags-main/svg/${h.nationCode}.svg" class="flag" alt=""></td>
+      <td>${h.time || ""}</td>
+      <td>${h.player || ""}</td>
+      <td><img src="${flagSrc(h.nationCode)}" class="flag" alt=""></td>
       <td>${h.days ?? 0}</td>
       <td>${h.lap1 ?? ""}</td>
       <td>${h.lap2 ?? ""}</td>
       <td>${h.lap3 ?? ""}</td>
-      <td><img src="${h.charIcon}" class="char-icon" alt=""></td>
+      <td><img src="${safeStaticPath(h.charIcon)}" class="char-icon" alt=""></td>
     </tr>
   `).join("");
 }
 
+
 // =================== SIDEBAR HANDLERS ===================
+// Stats nav links
+navLinks.forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
+    const view = link.dataset.view;
+
+    setActiveCourseLink(null);
+    showView(view);
+    scrollToTop();
+
+    if (view === "home") loadHomeCurrentWrs();
+    if (view === "snapshot") loadSnapshot();
+    if (view === "player-rankings") loadPlayerRankings();
+    if (view === "country-rankings") loadCountryRankings();
+    if (view === "recent-wrs") loadRecentWrs();
+  });
+});
+
+// Logo -> home
+document.querySelector(".logo-link")?.addEventListener("click", e => {
+  e.preventDefault();
+  setActiveCourseLink(null);
+  showView("home");
+  scrollToTop();
+  loadHomeCurrentWrs();
+});
+
+// Course links
 courseLinks.forEach(link => {
   link.addEventListener("click", e => {
     e.preventDefault();
@@ -356,14 +582,7 @@ courseLinks.forEach(link => {
     setActiveCourseLink(courseId);
     loadCourse(courseId);
     showView("course");
-  });
-});
-
-homeLinks.forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    setActiveCourseLink(null);
-    showView("home");
+    scrollToTop();
   });
 });
 
@@ -371,3 +590,4 @@ homeLinks.forEach(link => {
 showView("home");
 updateTopNav();
 loadCountries();
+loadHomeCurrentWrs();

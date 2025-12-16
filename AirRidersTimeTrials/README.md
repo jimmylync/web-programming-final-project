@@ -12,6 +12,7 @@ One will run: python backend/app.py
 
 the other will run: python -m http.server 5500
 
-after they are running paste this into browser http://127.0.0.1:5500/
+after they are running paste both of these into browser http://127.0.0.1:5500/ and http://127.0.0.1:5000/
 
-What if I instead paste this: http://127.0.0.1:5500/AirRidersTimeTrials/
+What if I instead paste this: http://127.0.0.1:5500/AirRidersTimeTrials/ and http://127.0.0.1:5000/AirRidersTimeTrials/
+

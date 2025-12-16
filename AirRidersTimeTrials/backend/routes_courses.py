@@ -1,8 +1,15 @@
+# routes_courses.py
+from datetime import date
 from flask import Blueprint, jsonify
 from extensions import db
-from models import Course, Machine, Character, Record, User
+from models import Course, Record, User
 
-bp_courses = Blueprint("courses", __name__)
+bp_courses = Blueprint("course", __name__)
+
+def days_since(d: date) -> int:
+    if not d:
+        return 0
+    return max((date.today() - d).days, 0)
 
 @bp_courses.get("/api/course/<course_key>")
 def get_course(course_key):
@@ -10,74 +17,141 @@ def get_course(course_key):
     if not course:
         return jsonify({"error": "Course not found"}), 404
 
-    # current WR per machine = lowest time_ms for that course + machine
-    machines = Machine.query.order_by(Machine.name.asc()).all()
-    current_machine_wrs = []
-
-    for m in machines:
-        wr = (
-            Record.query
-            .filter_by(course_id=course.id, machine_id=m.id)
-            .order_by(Record.time_ms.asc(), Record.date_set.desc())
-            .first()
+    # ----------------------------
+    # Current Machine WRs:
+    # best time per machine for this course (lowest time_ms)
+    # ----------------------------
+    best_per_machine = (
+        db.session.query(
+            Record.machine_id,
+            db.func.min(Record.time_ms).label("best_ms")
         )
-        if wr:
-            current_machine_wrs.append({
-                "machineName": wr.machine.name,
-                "machineIcon": wr.machine.icon,
-                "date": wr.date_set.isoformat(),
-                "time": wr.time_str,
-                "player": wr.user.username,
-                "nationCode": (wr.user.country_code or "us"),
-                "days": 0,  # optional, compute later if you want
-                "lap1": wr.lap1,
-                "lap2": wr.lap2,
-                "lap3": wr.lap3,
-                "charIcon": wr.character.icon,
-                "charAlt": wr.character.name
-            })
+        .filter(Record.course_id == course.id)
+        .group_by(Record.machine_id)
+        .subquery()
+    )
 
-    # history: latest 50 records for this course
-    history = (
-        Record.query
-        .filter_by(course_id=course.id)
-        .order_by(Record.date_set.desc(), Record.time_ms.asc())
-        .limit(50)
+    current_recs = (
+        db.session.query(Record)
+        .join(
+            best_per_machine,
+            db.and_(
+                Record.machine_id == best_per_machine.c.machine_id,
+                Record.time_ms == best_per_machine.c.best_ms,
+                Record.course_id == course.id
+            )
+        )
+        .order_by(Record.machine_id.asc())
         .all()
     )
 
-    history_rows = [{
-        "date": r.date_set.isoformat(),
-        "machineName": r.machine.name,
-        "machineIcon": r.machine.icon,
-        "time": r.time_str,
-        "player": r.user.username,
-        "nationCode": (r.user.country_code or "us"),
-        "days": 0,
-        "lap1": r.lap1,
-        "lap2": r.lap2,
-        "lap3": r.lap3,
-        "charIcon": r.character.icon,
-        "charAlt": r.character.name
-    } for r in history]
+    currentMachineWrs = []
+    for r in current_recs:
+        nation_code = (r.user.country_code or "").lower()
+        currentMachineWrs.append({
+            "machineName": r.machine.name,
+            "machineIcon": f"static/{r.machine.icon}".replace("\\", "/") if not r.machine.icon.startswith("static/") else r.machine.icon,
+            "date": r.date_set.isoformat() if r.date_set else "",
+            "time": r.time_str,
+            "player": r.user.username,
+            "nationCode": nation_code,  # expects lowercase for svg file names
+            "days": days_since(r.date_set),
+            "lap1": r.lap1,
+            "lap2": r.lap2,
+            "lap3": r.lap3,
+            "charIcon": f"static/{r.character.icon}".replace("\\", "/") if not r.character.icon.startswith("static/") else r.character.icon,
+            "charAlt": r.character.name
+        })
 
-    # very basic summary (you can improve later)
-    unique_players = db.session.query(User.id).join(Record, Record.user_id == User.id).filter(Record.course_id == course.id).distinct().count()
-    unique_nations = db.session.query(User.country_code).join(Record, Record.user_id == User.id).filter(Record.course_id == course.id).distinct().count()
-    total_wrs = len(current_machine_wrs)
+    # ----------------------------
+    # History (optional but matches your UI)
+    # newest first
+    # ----------------------------
+    history_q = (
+        Record.query
+        .filter(Record.course_id == course.id)
+        .order_by(Record.date_set.desc(), Record.time_ms.asc())
+        .limit(200)
+        .all()
+    )
+
+    history = []
+    for r in history_q:
+        nation_code = (r.user.country_code or "").lower()
+        history.append({
+            "date": r.date_set.isoformat() if r.date_set else "",
+            "machineName": r.machine.name,
+            "machineIcon": f"static/{r.machine.icon}".replace("\\", "/") if not r.machine.icon.startswith("static/") else r.machine.icon,
+            "time": r.time_str,
+            "player": r.user.username,
+            "nationCode": nation_code,
+            "days": days_since(r.date_set),
+            "lap1": r.lap1,
+            "lap2": r.lap2,
+            "lap3": r.lap3,
+            "charIcon": f"static/{r.character.icon}".replace("\\", "/") if not r.character.icon.startswith("static/") else r.character.icon
+        })
+
+    # ----------------------------
+    # Course Stats (based on current machine WRs)
+    # ----------------------------
+    total_days = sum(x["days"] for x in currentMachineWrs) or 1  # avoid divide-by-zero
+
+    # By Player
+    by_player = {}
+    for x in currentMachineWrs:
+        by_player.setdefault(x["player"], 0)
+        by_player[x["player"]] += x["days"]
+    statsByPlayer = [
+        {"player": p, "total": d, "pct": round((d / total_days) * 100, 2)}
+        for p, d in sorted(by_player.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+
+    # By Machine
+    by_machine = {}
+    for x in currentMachineWrs:
+        by_machine.setdefault(x["machineName"], 0)
+        by_machine[x["machineName"]] += x["days"]
+    statsByMachine = [
+        {"machine": m, "total": d, "pct": round((d / total_days) * 100, 2)}
+        for m, d in sorted(by_machine.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+
+    # By Nation (count of current WRs per nation)
+    by_nation = {}
+    for x in currentMachineWrs:
+        code = x["nationCode"] or "??"
+        by_nation.setdefault(code, 0)
+        by_nation[code] += 1
+    statsByNation = [
+        {"nation": n, "count": c}
+        for n, c in sorted(by_nation.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+
+    summary = {
+        "totalMachineWrs": len(currentMachineWrs),
+        "uniquePlayers": len(set(x["player"] for x in currentMachineWrs)),
+        "uniqueNations": len(set(x["nationCode"] for x in currentMachineWrs if x["nationCode"])),
+        "uniqueMachines": len(set(x["machineName"] for x in currentMachineWrs)),
+    }
+
+    # map icon path (your Course.map_icon already looks like images/mapICONS/Name.png)
+    map_icon = ""
+    if course.map_icon:
+        map_icon = course.map_icon.replace("\\", "/")
+        if not map_icon.startswith("static/"):
+            map_icon = f"static/{map_icon}"
 
     return jsonify({
+        "key": course.course_key,
         "name": course.name,
-        "mapIcon": course.map_icon,
-        "summary": {
-            "totalMachineWrs": total_wrs,
-            "uniquePlayers": unique_players,
-            "uniqueNations": unique_nations,
-            "uniqueMachines": total_wrs
-        },
-        "currentMachineWrs": current_machine_wrs,
-        "statsByPlayer": [],
-        "statsByMachine": [],
-        "statsByNation": [],
-        "history": history_rows
+        "mapIcon": map_icon,
+        "currentMachineWrs": currentMachineWrs,
+        "history": history,
+        "summary": summary,
+        "stats": {
+            "byPlayer": statsByPlayer,
+            "byMachine": statsByMachine,
+            "byNation": statsByNation
+        }
     })

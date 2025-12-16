@@ -1,6 +1,6 @@
 import os
 import re
-from flask import Flask, send_from_directory
+from flask import Flask, app, send_from_directory
 from flask_cors import CORS
 
 from config import Config
@@ -185,7 +185,12 @@ def create_app():
     ma.init_app(app)
     jwt.init_app(app)
 
+    from routes_stats import bp_stats
+
+
     # Blueprints
+
+    app.register_blueprint(bp_stats)
     app.register_blueprint(bp_home)
     app.register_blueprint(bp_countries)
     app.register_blueprint(bp_auth)
@@ -217,4 +222,4 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5500)
+    app.run(debug=True, port=5000)

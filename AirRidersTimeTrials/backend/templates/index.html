@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Kirby Air Riders - World Records</title>
-  <link rel="stylesheet" href="static\styles.css"/>
+  <link rel="stylesheet" href="static/styles.css"/>
 </head>
 <body>
   <div class="page-shell">
@@ -22,7 +22,7 @@
         <!-- Logo -->
         <div class="logo-panel">
           <a href="#" class="logo-link" data-view="home">
-            <img src="static\images/logos/logo.png" alt="Kirby Air Riders Logo" class="site-logo" />
+            <img src="static/images/logos/logo.png" alt="Kirby Air Riders Logo" class="site-logo" />
           </a>
         </div>
 
@@ -31,10 +31,10 @@
           <h2 class="sidebar-title">Stats</h2>
           <ul class="sidebar-list">
             <li><a href="#" class="nav-link" data-view="home">Current WRs</a></li>
-            <li><a href="#" class="nav-link">WR Snapshot</a></li>
-            <li><a href="#" class="nav-link">Player Rankings</a></li>
-            <li><a href="#" class="nav-link">Country Rankings</a></li>
-            <li><a href="#" class="nav-link">Recent WRs</a></li>
+            <li><a href="#" class="nav-link" data-view="snapshot">WR Snapshot</a></li>
+            <li><a href="#" class="nav-link" data-view="player-rankings">Player Rankings</a></li>
+            <li><a href="#" class="nav-link" data-view="country-rankings">Country Rankings</a></li>
+            <li><a href="#" class="nav-link" data-view="recent-wrs">Recent WRs</a></li>
           </ul>
         </nav>
 
@@ -42,7 +42,7 @@
         <nav class="sidebar-panel">
           <div class="sidebar-title-row">
             <h2 class="sidebar-title">Air Ride WR History</h2>
-            <img src="static\images/logos/airride.png" alt="Air Ride" class="mini-logo" />
+            <img src="static/images/logos/airride.png" alt="Air Ride" class="mini-logo" />
           </div>
           <ul class="sidebar-list sidebar-list-tight">
             <li><a href="#" class="course-link" data-course-id="floria-fields">Floria Fields</a></li>
@@ -55,7 +55,6 @@
             <li><a href="#" class="course-link" data-course-id="mount-amberfalls">Mount Amberfalls</a></li>
             <li><a href="#" class="course-link" data-course-id="galactic-nova">Galactic Nova</a></li>
 
-            <!-- moved here -->
             <li><a href="#" class="course-link" data-course-id="fantasy-meadows">Fantasy Meadows</a></li>
             <li><a href="#" class="course-link" data-course-id="frozen-hillside">Frozen Hillside</a></li>
 
@@ -73,7 +72,7 @@
         <nav class="sidebar-panel">
           <div class="sidebar-title-row">
             <h2 class="sidebar-title">Top Ride WR History</h2>
-            <img src="static\images/logos/topride.png" alt="Top Ride" class="mini-logo" />
+            <img src="static/images/logos/topride.png" alt="Top Ride" class="mini-logo" />
           </div>
           <ul class="sidebar-list sidebar-list-tight">
             <li><a href="#" class="course-link" data-course-id="flower">Flower</a></li>
@@ -99,7 +98,7 @@
             Click a course on the left to view machine-specific records and history.
           </p>
 
-          <h2 class="section-title">Highlighted Courses</h2>
+          <h2 class="section-title">Current WRs</h2>
           <div class="table-wrapper">
             <table class="records-table">
               <thead>
@@ -113,59 +112,103 @@
                   <th>Character</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Floria Fields</td>
-                  <td class="machine-cell">
-                    <img src="static\images/machineICONS/KARs_Warp_Star_Icon.png" alt="Warp Star" class="machine-icon" />
-                    <span>Warp Star</span>
-                  </td>
-                  <td>1'12&quot;501</td>
-                  <td>petal</td>
-                  <td><img src="static\images/country-flags-main/svg/us.svg" alt="US" class="flag" /></td>
-                  <td>2025-09-12</td>
-                  <td><img src="static\images/charICONS/KARs_Kirby_icon.png" alt="Kirby" class="char-icon" /></td>
-                </tr>
-
-                <tr>
-                  <td>Waveflow Waters</td>
-                  <td class="machine-cell">
-                    <img src="static\images/machineICONS/KARs_Rex_Wheelie_Icon.png" alt="Rex Wheelie" class="machine-icon" />
-                    <span>Rex Wheelie</span>
-                  </td>
-                  <td>1'05&quot;780</td>
-                  <td>tsunami</td>
-                  <td><img src="static\images/country-flags-main/svg/jp.svg" alt="JP" class="flag" /></td>
-                  <td>2025-08-02</td>
-                  <td><img src="static\images/charICONS/KARs_Marx_icon.png" alt="Marx" class="char-icon" /></td>
-                </tr>
-
-                <tr>
-                  <td>Flower (Top Ride)</td>
-                  <td class="machine-cell">
-                    <img src="static\images/machineICONS/KARs_Bull_Tank_Icon.png" alt="Bull Tank" class="machine-icon" />
-                    <span>Bull Tank</span>
-                  </td>
-                  <td>0'32&quot;120</td>
-                  <td>blossom</td>
-                  <td><img src="static\images/country-flags-main/svg/ca.svg" alt="CA" class="flag" /></td>
-                  <td>2025-03-04</td>
-                  <td><img src="static\images/charICONS/KARs_Taranza_icon.png" alt="Taranza" class="char-icon" /></td>
-                </tr>
-
-                <tr>
-                  <td>Flow (Top Ride)</td>
-                  <td class="machine-cell">
-                    <img src="static\images/machineICONS/KARs_Hop_Star_Icon.png" alt="Hop Star" class="machine-icon" />
-                    <span>Hop Star</span>
-                  </td>
-                  <td>0'29&quot;800</td>
-                  <td>river</td>
-                  <td><img src="static\images/country-flags-main/svg/us.svg" alt="US" class="flag" /></td>
-                  <td>2025-01-20</td>
-                  <td><img src="static\images/charICONS/KARs_Meta_Knight_icon.png" alt="Meta Knight" class="char-icon" /></td>
-                </tr>
+              <tbody id="home-current-wrs-body">
+                <!-- JS fills from DB -->
               </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- WR SNAPSHOT VIEW -->
+        <section class="course-panel" data-view="snapshot" id="snapshot-panel">
+          <h1 class="page-title">WR Snapshot</h1>
+          <p class="placeholder-text">
+            Quick summary view of records by course, machine, character, and nation.
+          </p>
+
+          <div class="table-wrapper">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Machine</th>
+                  <th>Best Time</th>
+                  <th>Player</th>
+                  <th>Nation</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="snapshot-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- PLAYER RANKINGS VIEW -->
+        <section class="course-panel" data-view="player-rankings" id="player-rankings-panel">
+          <h1 class="page-title">Player Rankings</h1>
+          <p class="placeholder-text">
+            Rankings by total WR count, total days holding WRs, and other metrics.
+          </p>
+
+          <div class="table-wrapper">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Player</th>
+                  <th>Nation</th>
+                  <th>WR Count</th>
+                  <th>Total WR Days</th>
+                </tr>
+              </thead>
+              <tbody id="player-rankings-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- COUNTRY RANKINGS VIEW -->
+        <section class="course-panel" data-view="country-rankings" id="country-rankings-panel">
+          <h1 class="page-title">Country Rankings</h1>
+          <p class="placeholder-text">
+            Rankings by total records held by players from each nation.
+          </p>
+
+          <div class="table-wrapper">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Nation</th>
+                  <th>WR Count</th>
+                  <th>Unique Players</th>
+                </tr>
+              </thead>
+              <tbody id="country-rankings-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- RECENT WRS VIEW -->
+        <section class="course-panel" data-view="recent-wrs" id="recent-wrs-panel">
+          <h1 class="page-title">Recent WRs</h1>
+          <p class="placeholder-text">
+            Latest world records submitted across all courses (last 5 days).
+          </p>
+
+          <div class="table-wrapper">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Course</th>
+                  <th>Machine</th>
+                  <th>Time</th>
+                  <th>Player</th>
+                  <th>Nation</th>
+                  <th>Character</th>
+                </tr>
+              </thead>
+              <tbody id="recent-wrs-body"></tbody>
             </table>
           </div>
         </section>
@@ -305,7 +348,6 @@
       <form id="upload-form">
         <select id="upload-course" required>
           <option value="">Course</option>
-          <!-- Course keys match backend -->
           <option value="floria-fields">Floria Fields</option>
           <option value="waveflow-waters">Waveflow Waters</option>
           <option value="flower">Flower (Top Ride)</option>
@@ -343,7 +385,6 @@
     </div>
   </div>
 
-  <!-- <script src="scripts.js"></script> -->
-  <script src="static\scripts.js"></script>
+  <script src="static/scripts.js"></script>
 </body>
 </html>

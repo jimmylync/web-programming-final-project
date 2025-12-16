@@ -1,155 +1,155 @@
-/* ===== Global reset ===== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ===== Global reset ===== */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(to bottom, #ffd7ea 0%, #f3f2ff 35%, #b7cae4 100%);
-  padding: 10px 0;
-}
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(to bottom, #ffd7ea 0%, #e68ec4 35%, #ed5cc1 100%);
+    padding: 10px 0;
+  }
 
-a { text-decoration: none; color: inherit; }
+  a { text-decoration: none; color: inherit; }
 
-/* ===== Outer white box ===== */
-.page-shell {
-  max-width: 1150px;
-  margin: 0 auto;
-  background: #ffffff;
-  border: 1px solid #999da8;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-}
+  /* ===== Outer white box ===== */
+  .page-shell {
+    max-width: 1150px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #a899a7;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  }
 
-/* ===== Top bar ===== */
-.top-nav {
-  background: #c2ccd9;
-  border-bottom: 1px solid #8b97ab;
-  font-size: 0.9rem;
-}
-.top-nav-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 6px 10px;
-  text-align: right;
-}
-.top-links a:hover { color: #ffe1f4; }
+  /* ===== Top bar ===== */
+  .top-nav {
+    background: #dfcdd9;
+    border-bottom: 1px solid #ab8ba7;
+    font-size: 0.9rem;
+  }
+  .top-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6px 10px;
+    text-align: right;
+  }
+  .top-links a:hover { color: #f9bf00; }
 
-/* ===== Layout ===== */
-.layout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 16px;
-  max-width: 1100px;
-  margin: 10px auto 12px auto;
-  padding: 0 8px 12px 8px;
-}
+  /* ===== Layout ===== */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 16px;
+    max-width: 1100px;
+    margin: 10px auto 12px auto;
+    padding: 0 8px 12px 8px;
+  }
 
-/* ===== Sidebar ===== */
-.sidebar { display: flex; flex-direction: column; gap: 12px; }
+  /* ===== Sidebar ===== */
+  .sidebar { display: flex; flex-direction: column; gap: 12px; }
 
-.logo-panel { text-align: center; background: transparent; padding: 8px 0; }
-.site-logo { max-width: 100%; height: auto; }
+  .logo-panel { text-align: center; background: transparent; padding: 8px 0; }
+  .site-logo { max-width: 100%; height: auto; }
 
-.sidebar-panel {
-  background: #1c4f94;
-  color: white;
-  padding: 10px 12px;
-  border-radius: 14px;
-  box-shadow: 0 0 3px rgba(0,0,0,0.25);
-}
+  .sidebar-panel {
+    background: #dfcdd9;
+    color: rgb(0, 0, 0);
+    padding: 10px 12px;
+    border-radius: 14px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.25);
+  }
 
-.sidebar-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  .sidebar-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.sidebar-title { font-size: 0.9rem; font-weight: bold; margin-bottom: 6px; }
-.mini-logo { height: 22px; width: auto; }
+  .sidebar-title { font-size: 0.9rem; font-weight: bold; margin-bottom: 6px; }
+  .mini-logo { height: 22px; width: auto; }
 
-.sidebar-list { list-style: none; }
-.sidebar-list li { margin: 3px 0; }
-.sidebar-list a { color: white; font-size: 0.85rem; }
-.sidebar-list a:hover { color: #ffd1eb; }
+  .sidebar-list { list-style: none; }
+  .sidebar-list li { margin: 3px 0; }
+  .sidebar-list a { color: rgb(0, 0, 0); font-size: 0.85rem; }
+  .sidebar-list a:hover { color: #f9bf00; }
 
-.course-link-active { font-weight: bold; color: #ffd1eb; }
+  .course-link-active { font-weight: bold; color: #ffd1eb; }
 
-/* ===== Content ===== */
-.content { padding: 6px 10px 10px 10px; }
-.page-title { font-size: 1.6rem; margin-bottom: 8px; }
-.placeholder-text { margin-bottom: 16px; font-size: 0.95rem; color: #444; }
-.section-title { margin: 8px 0 6px 0; font-size: 1.1rem; }
+  /* ===== Content ===== */
+  .content { padding: 6px 10px 10px 10px; }
+  .page-title { font-size: 1.6rem; margin-bottom: 8px; }
+  .placeholder-text { margin-bottom: 16px; font-size: 0.95rem; color: #444; }
+  .section-title { margin: 8px 0 6px 0; font-size: 1.1rem; }
 
-/* ===== Tables ===== */
-.table-wrapper { border: 1px solid #b8c0cd; overflow-x: auto; }
-.records-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-.records-table th, .records-table td {
-  padding: 6px 8px;
-  border-bottom: 1px solid #e0e4ec;
-}
-.records-table th { background: #dde3f1; text-align: left; }
-.records-table tr:nth-child(even) { background: #f7f8fc; }
-.records-table tr:hover { background: #eaf1ff; }
+  /* ===== Tables ===== */
+  .table-wrapper { border: 1px solid #dfcdd9; overflow-x: auto; }
+  .records-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .records-table th, .records-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #e0e4ec;
+  }
+  .records-table th { background: #dfcdd9; text-align: left; }
+  .records-table tr:nth-child(even) { background: #f7f8fc; }
+  .records-table tr:hover { background: #eaf1ff; }
 
-.flag { height: 16px; width: auto; display: block; }
+  .flag { height: 16px; width: auto; display: block; }
 
-.machine-cell { display: flex; align-items: center; gap: 6px; }
-.machine-icon, .char-icon { height: 26px; width: 26px; }
+  .machine-cell { display: flex; align-items: center; gap: 6px; }
+  .machine-icon, .char-icon { height: 26px; width: 26px; }
 
-/* ===== Panels ===== */
-.course-panel { display: none; }
-.course-panel.active { display: block; }
+  /* ===== Panels ===== */
+  .course-panel { display: none; }
+  .course-panel.active { display: block; }
 
-/* ===== Stats + map section ===== */
-.course-section-title { margin-top: 18px; margin-bottom: 6px; font-size: 1.1rem; }
-.course-note { font-size: 0.85rem; margin-bottom: 6px; color: #555; }
+  /* ===== Stats + map section ===== */
+  .course-section-title { margin-top: 18px; margin-bottom: 6px; font-size: 1.1rem; }
+  .course-note { font-size: 0.85rem; margin-bottom: 6px; color: #555; }
 
-.course-stats-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.stat-box { border: 1px solid #b8c0cd; padding: 6px; background: #fff; min-width: 200px; }
-.stat-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-.stat-table th, .stat-table td { padding: 4px 6px; border-bottom: 1px solid #e0e4ec; }
-.stat-table th { background: #dde3f1; }
+  .course-stats-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .stat-box { border: 1px solid #dfcdd9; padding: 6px; background: #fff; min-width: 200px; }
+  .stat-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .stat-table th, .stat-table td { padding: 4px 6px; border-bottom: 1px solid #dfcdd9; }
+  .stat-table th { background: #dfcdd9; }
 
-.course-image { max-width: 150px; height: auto; display: block; margin: 8px auto 0 auto; }
-.course-summary { list-style: none; font-size: 0.85rem; }
+  .course-image { max-width: 150px; height: auto; display: block; margin: 8px auto 0 auto; }
+  .course-summary { list-style: none; font-size: 0.85rem; }
 
-/* ===== Modal system ===== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+  /* ===== Modal system ===== */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
 
-.modal.active { display: flex; }
+  .modal.active { display: flex; }
 
-.modal-box {
-  background: white;
-  padding: 16px;
-  border-radius: 10px;
-  width: 320px;
-}
+  .modal-box {
+    background: white;
+    padding: 16px;
+    border-radius: 10px;
+    width: 320px;
+  }
 
-.modal-box.wide { width: 430px; }
+  .modal-box.wide { width: 430px; }
 
-.modal-box h2 { margin-bottom: 10px; }
+  .modal-box h2 { margin-bottom: 10px; }
 
-.modal-box form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+  .modal-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-.modal-box input,
-.modal-box select,
-.modal-box button {
-  padding: 8px;
-  font-size: 0.9rem;
-}
+  .modal-box input,
+  .modal-box select,
+  .modal-box button {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
 
-.modal-close { margin-top: 8px; padding: 8px; }
+  .modal-close { margin-top: 8px; padding: 8px; }
