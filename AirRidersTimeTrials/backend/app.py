@@ -6,6 +6,9 @@ from flask_cors import CORS
 from config import Config
 from extensions import db, ma, jwt
 
+
+from routes_main import bp_home
+
 from routes_countries import bp_countries, load_countries_from_json
 from routes_auth import bp_auth
 from routes_courses import bp_courses
@@ -184,6 +187,8 @@ def create_app():
     jwt.init_app(app)
 
     # Blueprints
+    app.register_blueprint(bp_home)
+    
     app.register_blueprint(bp_countries)
     app.register_blueprint(bp_auth)
     app.register_blueprint(bp_courses)
@@ -214,4 +219,4 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5500)
