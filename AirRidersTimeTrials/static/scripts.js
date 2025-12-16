@@ -1,5 +1,6 @@
 // =================== CONFIG ===================
-const API_BASE = "http://127.0.0.1:5000";
+//const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "http://127.0.0.1:5500";   // Turned out we just needed to change this to get countries to display
 
 // =================== AUTH HELPERS ===================
 function getToken() {
@@ -70,6 +71,9 @@ function attachNavHandlers() {
 
   if (login) login.onclick = (e) => { e.preventDefault(); openModal("login-modal"); };
   if (register) register.onclick = (e) => { e.preventDefault(); openModal("register-modal"); };
+  // if (register) register.onclick = (e) => { e.preventDefault(); openModal("register-modal"); loadCountries(); };
+  // if (register) register.onclick = (e) => { e.preventDefault(); openModal("register-modal"); document.getElementById("register-country").addEventListener("click", loadCountries); };
+  
 
   if (profile) {
     profile.onclick = (e) => {
@@ -91,6 +95,7 @@ function attachNavHandlers() {
 
 // =================== COUNTRIES ===================
 async function loadCountries() {
+  // console.log('Hello');
   try {
     const res = await fetch(`${API_BASE}/api/countries`);
     const countries = await res.json();
@@ -99,9 +104,10 @@ async function loadCountries() {
       document.getElementById("register-country"),
       document.getElementById("profile-country")
     ];
-
+    // Reducing repetitive code
     selects.forEach(select => {
       if (!select) return;
+      // console.log('Yo');
       select.innerHTML = `<option value="">Country</option>`;
       countries.forEach(c => {
         const opt = document.createElement("option");
