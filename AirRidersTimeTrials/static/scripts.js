@@ -179,6 +179,8 @@ document.getElementById("login-form")?.addEventListener("submit", async e => {
   }
 });
 
+
+// this registers the user, along with their passwd and country
 document.getElementById("register-form")?.addEventListener("submit", async e => {
   e.preventDefault();
 
@@ -203,6 +205,8 @@ document.getElementById("register-form")?.addEventListener("submit", async e => 
   }
 });
 
+
+//This part has the problem with updating the country of the user
 document.getElementById("profile-form")?.addEventListener("submit", async e => {
   e.preventDefault();
   if (!isLoggedIn()) return;

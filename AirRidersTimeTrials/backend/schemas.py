@@ -1,5 +1,5 @@
 import re
-from marshmallow import Schema, fields, validates, ValidationError
+from marshmallow import Schema, fields, validates, ValidationError, EXCLUDE
 from models import Country
 from extensions import db
 
@@ -32,30 +32,49 @@ class RegisterSchema(Schema):
     password = fields.Str(required=True, load_only=True)
     country_code = fields.Str(required=False, allow_none=True)
 
+#i think that **kwargs should help as any additional info from marshmellow, interups data flow
     @validates("username")
-    def validate_username(self, value):
+    def validate_username(self, value, **kwargs):
         if len(value) < 3:
             raise ValidationError("Username must be at least 3 characters.")
         if len(value) > 50:
             raise ValidationError("Username too long.")
 
+# did **kwargs to validate password
     @validates("password")
-    def validate_password(self, value):
+    def validate_password(self, value, **kwargs):
         if len(value) < 6:
             raise ValidationError("Password must be at least 6 characters.")
 
+
+class UpdateUserSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE #ignores any additional data
+    
+    #only validate the change in country
+    country_code = fields.Str(required=False, allow_none=True)
+    
+
+#did **kwargs to def valid country code
     @validates("country_code")
-    def validate_country_code(self, value):
+    def validate_country_code(self, value, **kwargs):
         if value is None or value == "":
             return
-        value = value.lower()
-        exists = db.session.get(Country, value)
-        if not exists:
-            raise ValidationError("Invalid country code.")
+        
+        #checks for lowercase
+        if db.session.get(Country, value.lower()):
+            return
+        
+        #checks for uppercase
+        if db.session.get(Country, value.upper()):
+            return
+
+        raise ValidationError("Invalid country code: {value}")
 
 class LoginSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
+    
 
 class RecordCreateSchema(Schema):
     course_key = fields.Str(required=True)
@@ -66,8 +85,9 @@ class RecordCreateSchema(Schema):
     lap2 = fields.Float(required=False, allow_none=True)
     lap3 = fields.Float(required=False, allow_none=True)
 
+#did the same here with time, using **kwargs
     @validates("time")
-    def validate_time(self, value):
+    def validate_time(self, value, **kwargs):
         if not TIME_RE.match(value):
             raise ValidationError("Time must look like: 1'05\"780")
         # also ensure parse works

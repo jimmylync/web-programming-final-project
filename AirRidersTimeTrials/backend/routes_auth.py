@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from extensions import db
 from models import User
-from schemas import RegisterSchema, LoginSchema
+from schemas import RegisterSchema, LoginSchema, UpdateUserSchema
 
 bp_auth = Blueprint("auth", __name__)
 
@@ -29,7 +29,9 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    token = create_access_token(identity=user.id)
+#changed the tokens to strings
+    #token = create_access_token(identity=user.id)
+    token = create_access_token(identity=str(user.id))
     return jsonify({"access_token": token, "user": {"username": user.username, "country_code": user.country_code}}), 201
 
 @bp_auth.post("/api/login")
@@ -41,7 +43,9 @@ def login():
     if not user or not check_password_hash(user.password_hash, data["password"]):
         return jsonify({"error": "Invalid username or password."}), 401
 
-    token = create_access_token(identity=user.id)
+    #changed the tokens to strings
+    #token = create_access_token(identity=user.id)
+    token = create_access_token(identity=str(user.id))
     return jsonify({"access_token": token, "user": {"username": user.username, "country_code": user.country_code}})
 
 @bp_auth.get("/api/me")
@@ -49,6 +53,9 @@ def login():
 def me():
     user_id = get_jwt_identity()
     user = db.session.get(User, user_id)
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
     return jsonify({"username": user.username, "country_code": user.country_code})
 
 @bp_auth.patch("/api/me")
@@ -56,12 +63,24 @@ def me():
 def update_me():
     user_id = get_jwt_identity()
     user = db.session.get(User, user_id)
-
+    
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    
     payload = request.get_json(force=True)
-    # keep it minimal: only country for now
-    country_code = payload.get("country_code")
-    if country_code is not None:
-        user.country_code = country_code.lower().strip() or None
+
+    try:
+        data = UpdateUserSchema().load(payload)
+    except Exception as e:
+        print("DEBUG VALIDATION ERROR:", e.messages if hasattr(e, 'messages') else str(e)) #CHANGE THIS LATER FIXME
+        return jsonify({"error": str(e.messages if hasattr(e, 'messages') else e)}), 422
+    
+    if "country_code" in data:
+        code = data["country_code"]
+        user.country_code = code.lower() if code else None
 
     db.session.commit()
-    return jsonify({"username": user.username, "country_code": user.country_code})
+
+    return jsonify({"username": user.username, 
+                    "country_code": user.country_code})
+
