@@ -1,0 +1,450 @@
+/*! tailwindcss v4.1.18 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .visible {
+    visibility: visible;
+  }
+  .relative {
+    position: relative;
+  }
+  .static {
+    position: static;
+  }
+  .table {
+    display: table;
+  }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+  .lowercase {
+    text-transform: lowercase;
+  }
+  .uppercase {
+    text-transform: uppercase;
+  }
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(to bottom, #ffd7ea 0%, #e68ec4 35%, #ed5cc1 100%);
+  padding: 10px 0;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+.page-shell {
+  max-width: 1150px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #a899a7;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+}
+.top-nav {
+  background: #dfcdd9;
+  border-bottom: 1px solid #ab8ba7;
+  font-size: 0.9rem;
+}
+.top-nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 6px 10px;
+  text-align: right;
+}
+.top-links a:hover {
+  color: #f9bf00;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 10px auto 12px auto;
+  padding: 0 8px 12px 8px;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.logo-panel {
+  text-align: center;
+  background: transparent;
+  padding: 8px 0;
+}
+.site-logo {
+  max-width: 100%;
+  height: auto;
+}
+.sidebar-panel {
+  background: #dfcdd9;
+  color: rgb(0, 0, 0);
+  padding: 10px 12px;
+  border-radius: 14px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.25);
+}
+.sidebar-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sidebar-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.mini-logo {
+  height: 22px;
+  width: auto;
+}
+.sidebar-list {
+  list-style: none;
+}
+.sidebar-list li {
+  margin: 3px 0;
+}
+.sidebar-list a {
+  color: rgb(0, 0, 0);
+  font-size: 0.85rem;
+}
+.sidebar-list a:hover {
+  color: #f9bf00;
+}
+.course-link-active {
+  font-weight: bold;
+  color: #ffd1eb;
+}
+.content {
+  padding: 6px 10px 10px 10px;
+}
+.page-title {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+.placeholder-text {
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  color: #444;
+}
+.section-title {
+  margin: 8px 0 6px 0;
+  font-size: 1.1rem;
+}
+.table-wrapper {
+  border: 1px solid #dfcdd9;
+  overflow-x: auto;
+}
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.records-table th, .records-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #e0e4ec;
+}
+.records-table th {
+  background: #dfcdd9;
+  text-align: left;
+}
+.records-table tr:nth-child(even) {
+  background: #f7f8fc;
+}
+.records-table tr:hover {
+  background: #eaf1ff;
+}
+.flag {
+  height: 16px;
+  width: auto;
+  display: block;
+}
+.machine-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.machine-icon, .char-icon {
+  height: 26px;
+  width: 26px;
+}
+.course-panel {
+  display: none;
+}
+.course-panel.active {
+  display: block;
+}
+.course-section-title {
+  margin-top: 18px;
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+}
+.course-note {
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  color: #555;
+}
+.course-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.stat-box {
+  border: 1px solid #dfcdd9;
+  padding: 6px;
+  background: #fff;
+  min-width: 200px;
+}
+.stat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.stat-table th, .stat-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid #dfcdd9;
+}
+.stat-table th {
+  background: #dfcdd9;
+}
+.course-image {
+  max-width: 150px;
+  height: auto;
+  display: block;
+  margin: 8px auto 0 auto;
+}
+.course-summary {
+  list-style: none;
+  font-size: 0.85rem;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal.active {
+  display: flex;
+}
+.modal-box {
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  width: 320px;
+}
+.modal-box.wide {
+  width: 430px;
+}
+.modal-box h2 {
+  margin-bottom: 10px;
+}
+.modal-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.modal-box input, .modal-box select, .modal-box button {
+  padding: 8px;
+  font-size: 0.9rem;
+}
+.modal-close {
+  margin-top: 8px;
+  padding: 8px;
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+    }
+  }
+}
