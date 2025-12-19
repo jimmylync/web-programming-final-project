@@ -7,6 +7,8 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-red-600: oklch(57.7% 0.245 27.325);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-blue-700: oklch(48.8% 0.243 264.376);
     --color-pink-300: oklch(82.3% 0.12 346.018);
@@ -223,6 +225,9 @@
   .bg-pink-300 {
     background-color: var(--color-pink-300);
   }
+  .bg-red-500 {
+    background-color: var(--color-red-500);
+  }
   .px-3 {
     padding-inline: calc(var(--spacing) * 3);
   }
@@ -240,9 +245,6 @@
   }
   .lowercase {
     text-transform: lowercase;
-  }
-  .uppercase {
-    text-transform: uppercase;
   }
   .hover\:bg-blue-700 {
     &:hover {
@@ -269,6 +271,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-pink-400);
+      }
+    }
+  }
+  .hover\:bg-red-600 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-red-600);
       }
     }
   }
@@ -508,29 +517,6 @@ a {
   margin-top: 8px;
   padding: 8px;
 }
-
-/*save button */
-
-
-
-/* delete button */
-.btn-danger {
-  background-color: #ff5f5f !important; 
-  color: white !important;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: opacity 0.2s;
-  border: none;
-}
-
-.btn-danger:hover {
-  opacity: 0.8;
-}
-
-
-
-
 @property --tw-rotate-x {
   syntax: "*";
   inherits: false;

@@ -301,6 +301,7 @@ document.getElementById("upload-form")?.addEventListener("submit", async e => {
     loadRecentWrs();
   } catch (err) {
     // alert(err.message || "Upload failed");
+    // In the future, could add a check to see if the issue is with the record not being a low enough time, or with the time not being formatted properly
     alert(`Record upload unsuccessful. Please make sure your time is below the current record, and that your time follows this format: 1'23"456`);
   }
 });
