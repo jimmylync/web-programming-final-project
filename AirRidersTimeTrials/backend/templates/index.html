@@ -306,11 +306,12 @@
     <div class="modal-box">
       <h2>Log In</h2>
       <form id="login-form">
-        <input type="text" id="login-username" placeholder="Username" required />
-        <input type="password" id="login-password" placeholder="Password" required />
-        <button type="submit">Log In</button>
+        <input type="text" id="login-username" placeholder="Username" required class="w-full rounded-md border border-gray-300 px-3 py-2"/>
+        <input type="password" id="login-password" placeholder="Password" required class="w-full rounded-md border border-gray-300 px-3 py-2"/>
+        <!-- Blue: <button type="submit" class="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Log In</button> -->
+        <button type="submit" class="rounded-md bg-pink-300 px-4 py-2 text-black hover:bg-pink-400">Log In</button>
       </form>
-      <button class="modal-close" type="button">Cancel</button>
+      <button class="modal-close rounded-md bg-gray-200 px-4 py-2 text-black hover:bg-gray-300" type="button">Cancel</button>
     </div>
   </div>
 
@@ -318,14 +319,14 @@
     <div class="modal-box">
       <h2>Register</h2>
       <form id="register-form">
-        <input type="text" id="register-username" placeholder="Username" required />
-        <input type="password" id="register-password" placeholder="Password" required />
-        <select id="register-country" required>
+        <input type="text" id="register-username" placeholder="Username" required class="w-full rounded-md border border-gray-300 px-3 py-2"/>
+        <input type="password" id="register-password" placeholder="Password" required class="w-full rounded-md border border-gray-300 px-3 py-2"/>
+        <select id="register-country" required class="w-full rounded-md border border-gray-300 px-3 py-2">
           <option value="">Loading countries…</option>
         </select>
-        <button type="submit">Create Account</button>
+        <button type="submit" class="rounded-md bg-pink-300 px-4 py-2 text-black hover:bg-pink-400">Create Account</button>
       </form>
-      <button class="modal-close" type="button">Cancel</button>
+      <button type="button" class="modal-close rounded-md bg-gray-200 px-4 py-2 text-black hover:bg-gray-300">Cancel</button>
     </div>
   </div>
 
@@ -333,13 +334,13 @@
     <div class="modal-box">
       <h2>Edit Profile</h2>
       <form id="profile-form">
-        <input type="text" id="profile-username" disabled />
-        <select id="profile-country">
+        <input type="text" id="profile-username" disabled class="w-full rounded-md border border-gray-300 px-3 py-2"/>
+        <select id="profile-country" class="w-full rounded-md border border-gray-300 px-3 py-2">
           <option value="">Loading countries…</option>
         </select>
-        <button type="submit">Save</button>
+        <button type="submit" class="rounded-md bg-pink-300 px-4 py-2 text-black hover:bg-pink-400">Save</button>
       </form>
-      <button class="modal-close" type="button">Close</button>
+      <button type="button" class="modal-close rounded-md bg-gray-200 px-4 py-2 text-black hover:bg-gray-300">Close</button>
     </div>
   </div>
 
@@ -347,7 +348,7 @@
     <div class="modal-box wide">
       <h2>Upload World Record</h2>
       <form id="upload-form">
-        <select id="upload-course" required>
+        <select id="upload-course" required class="w-full rounded-md border border-gray-300 px-3 py-2">
           <option value="">Course</option>
           <option value="floria-fields">Floria Fields</option>
           <option value="waveflow-waters">Waveflow Waters</option>
@@ -355,7 +356,7 @@
           <option value="flow">Flow (Top Ride)</option>
         </select>
 
-        <select id="upload-machine" required>
+        <select id="upload-machine" required class="w-full rounded-md border border-gray-300 px-3 py-2">
           <option value="">Machine</option>
           <option value="Warp Star">Warp Star</option>
           <option value="Rex Wheelie">Rex Wheelie</option>
@@ -363,13 +364,13 @@
           <option value="Hop Star">Hop Star</option>
         </select>
 
-        <input type="text" id="upload-time" placeholder="Time (e.g. 1'05&quot;780)" required />
+        <input type="text" id="upload-time" placeholder="Time (e.g. 1'05&quot;780)" required class="w-full rounded-md border border-gray-300 px-3 py-2"/>
 
-        <input type="number" step="0.001" id="upload-lap1" placeholder="Lap 1 (optional)" />
-        <input type="number" step="0.001" id="upload-lap2" placeholder="Lap 2 (optional)" />
-        <input type="number" step="0.001" id="upload-lap3" placeholder="Lap 3 (optional)" />
+        <input type="number" step="0.001" id="upload-lap1" placeholder="Lap 1 (optional)" class="w-full rounded-md border border-gray-300 px-3 py-2"/>
+        <input type="number" step="0.001" id="upload-lap2" placeholder="Lap 2 (optional)" class="w-full rounded-md border border-gray-300 px-3 py-2"/>
+        <input type="number" step="0.001" id="upload-lap3" placeholder="Lap 3 (optional)" class="w-full rounded-md border border-gray-300 px-3 py-2"/>
 
-        <select id="upload-character" required>
+        <select id="upload-character" required class="w-full rounded-md border border-gray-300 px-3 py-2">
           <option value="">Character</option>
           <option value="Kirby">Kirby</option>
           <option value="Marx">Marx</option>
@@ -377,12 +378,12 @@
           <option value="Meta Knight">Meta Knight</option>
         </select>
 
-        <label>Proof (video or screenshot)</label>
-        <input type="file" id="upload-proof" accept="video/*,image/*" required />
-
-        <button type="submit">Submit Record</button>
+        <label style="display:block; margin-bottom:-10px;">Proof (video or screenshot)</label>
+        <!-- <input type="file" id="upload-proof" accept="video/*,image/*" required class="modal-close max-w-xs rounded-md bg-gray-200 px-4 py-2 text-black hover:bg-gray-300"/> -->
+        <input type="file" id="upload-proof" accept="video/*,image/*" required class="modal-close w-22.5 rounded-xs bg-gray-400 px-4 py-2 text-black hover:bg-gray-500"/>
+        <button type="submit" class="rounded-md bg-pink-300 px-4 py-2 text-black hover:bg-pink-400">Submit Record</button>
       </form>
-      <button class="modal-close" type="button">Cancel</button>
+      <button type="button" class="modal-close rounded-md bg-gray-200 px-4 py-2 text-black hover:bg-gray-300">Cancel</button>
     </div>
   </div>
 
