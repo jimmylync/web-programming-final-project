@@ -206,12 +206,19 @@ document.getElementById("register-form")?.addEventListener("submit", async e => 
 });
 
 
-//This part has the problem with updating the country of the user
+//This part is updating the country of the user
 document.getElementById("profile-form")?.addEventListener("submit", async e => {
   e.preventDefault();
   if (!isLoggedIn()) return;
 
-  const country_code = document.getElementById("profile-country").value || null;
+  let val = document.getElementById("profile-country").value;
+
+  let country_code = (val && val.trim() !== "") ? val.toLowerCase() : null;
+
+  if (!country_code || country_code === "") {
+      country_code = null;
+  }
+
 
   try {
     const data = await fetchJSON(`${API_BASE}/api/me`, {
@@ -221,14 +228,22 @@ document.getElementById("profile-form")?.addEventListener("submit", async e => {
     });
 
     localStorage.setItem("user", JSON.stringify(data));
+    alert("Profile Updated");
     closeModals();
     updateTopNav();
   } catch (err) {
+    console.error("Validation Error:", err);
     alert(err.message || "Update failed");
   }
 });
 
 // =================== UPLOAD FORM (multipart + JWT) ===================
+function isValidTimeFormat(timeStr) {
+    // Regex for: minutes'seconds"milliseconds (e.g., 1'05"780)
+    const regex = /^\d+'\d{2}"\d{3}$/;
+    return regex.test(timeStr);
+}
+
 document.getElementById("upload-form")?.addEventListener("submit", async e => {
   e.preventDefault();
   if (!isLoggedIn()) {
@@ -241,6 +256,14 @@ document.getElementById("upload-form")?.addEventListener("submit", async e => {
   fd.append("machine_name", document.getElementById("upload-machine").value);
   fd.append("character_name", document.getElementById("upload-character").value);
   fd.append("time", document.getElementById("upload-time").value);
+
+  //error check on time input
+  const timeInput = document.getElementById("upload-time").value.trim();
+
+  if (!isValidTimeFormat(timeInput)) {
+      alert("Invalid time format! Please use: Minutes'Seconds\"Milliseconds (Ex: 1'05\"780)");
+      return;
+  }
 
   const lap1 = document.getElementById("upload-lap1").value;
   const lap2 = document.getElementById("upload-lap2").value;
@@ -255,6 +278,8 @@ document.getElementById("upload-form")?.addEventListener("submit", async e => {
     return;
   }
   fd.append("proof", proof);
+
+  
 
   try {
     await fetchJSON(`${API_BASE}/api/records`, {
@@ -595,3 +620,29 @@ showView("home");
 updateTopNav();
 loadCountries();
 loadHomeCurrentWrs();
+
+
+//===================== user deletion ==========================
+
+document.getElementById("delete-account-btn")?.addEventListener("click", async () => {
+  const confirmed = confirm("Are you sure you want to delete your AirRiders account? This will wipe your records and stats forever!");
+  
+  if (!confirmed) return;
+
+  try {
+    await fetchJSON(`${API_BASE}/api/me`, {
+      method: "DELETE",
+      headers: authHeaders()
+    });
+
+    alert("Your account has been deleted.");
+    
+    // Clears local storage
+    logoutNow(); 
+    closeModals();
+    showView("home"); 
+    
+  } catch (err) {
+    alert(err.message || "Deletion failed. Please try again.");
+  }
+});
