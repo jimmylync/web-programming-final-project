@@ -275,7 +275,8 @@ document.getElementById("upload-form")?.addEventListener("submit", async e => {
     loadHomeCurrentWrs();
     loadRecentWrs();
   } catch (err) {
-    alert(err.message || "Upload failed");
+    // alert(err.message || "Upload failed");
+    alert(`Record upload unsuccessful. Please make sure your time is below the current record, and that your time follows this format: 1'23"456`);
   }
 });
 
