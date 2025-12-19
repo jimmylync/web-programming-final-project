@@ -188,6 +188,11 @@ document.getElementById("register-form")?.addEventListener("submit", async e => 
   const password = document.getElementById("register-password").value;
   const country_code = document.getElementById("register-country").value || null;
 
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
   try {
     const data = await fetchJSON(`${API_BASE}/api/register`, {
       method: "POST",
