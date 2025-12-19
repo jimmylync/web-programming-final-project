@@ -34,6 +34,9 @@ class User(db.Model):
 
     country = db.relationship("Country")
 
+    #deletes the users records along with user acct being deleted
+    records = db.relationship("Record", back_populates="user", cascade="all, delete-orphan")
+
 class Record(db.Model):
     __tablename__ = "records"
     id = db.Column(db.Integer, primary_key=True)
@@ -58,4 +61,4 @@ class Record(db.Model):
     course = db.relationship("Course")
     machine = db.relationship("Machine")
     character = db.relationship("Character")
-    user = db.relationship("User")
+    user = db.relationship("User", back_populates="records")

@@ -84,3 +84,20 @@ def update_me():
     return jsonify({"username": user.username, 
                     "country_code": user.country_code})
 
+#this is the part where it deletes the user
+@bp_auth.delete("/api/me")
+@jwt_required()
+def delete_me():
+    user_id = get_jwt_identity()
+    user = db.session.get(User, user_id)
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": "Account deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Failed to delete account"}), 500

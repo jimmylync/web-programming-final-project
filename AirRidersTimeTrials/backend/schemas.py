@@ -1,5 +1,5 @@
 import re
-from marshmallow import Schema, fields, validates, ValidationError, EXCLUDE
+from marshmallow import Schema, fields, validates, validate, ValidationError, EXCLUDE
 from models import Country
 from extensions import db
 
@@ -52,7 +52,8 @@ class UpdateUserSchema(Schema):
         unknown = EXCLUDE #ignores any additional data
     
     #only validate the change in country
-    country_code = fields.Str(required=False, allow_none=True)
+    country_code = fields.Str(required=False, 
+                              allow_none=True)
     
 
 #did **kwargs to def valid country code
@@ -61,15 +62,20 @@ class UpdateUserSchema(Schema):
         if value is None or value == "":
             return
         
-        #checks for lowercase
-        if db.session.get(Country, value.lower()):
+        if len(value) != 2:
+            raise ValidationError("Country code must be exactly 2 characters.")
+        
+        lower_case_country_code = value.lower()
+        country_exists = db.session.get(Country, lower_case_country_code)
+
+        #checks
+        if country_exists:
             return
         
-        #checks for uppercase
-        if db.session.get(Country, value.upper()):
-            return
+        print(f"DEBUG: Checking country '{lower_case_country_code}'... Found: {country_exists is not None}")
 
-        raise ValidationError("Invalid country code: {value}")
+        if not country_exists:
+            raise ValidationError(f"Invalid country code: {value}")
 
 class LoginSchema(Schema):
     username = fields.Str(required=True)
